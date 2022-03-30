@@ -40,8 +40,8 @@ echo asTable($teamResult);
  */
 echo '<h1>Report 1 - Best 3pt Shooters</h1>';
 // write your query here
-$threePointShooterSql = 
-"SELECT r.name as player_name, t.name as full_team_name, age, `number`, pos, CONCAT(FORMAT(3pt/3pt_attempted * 100, 2), '%') as 3pt_percentage, 3pt as number_of_3pointers_made
+$threePointShooterSql = "
+SELECT r.name as player_name, t.name as full_team_name, age, `number`, pos, CONCAT(FORMAT(3pt/3pt_attempted * 100, 2), '%') as 3pt_percentage, 3pt as number_of_3pointers_made
 FROM roster as r
 LEFT JOIN team as t ON r.team_code = t.code
 LEFT JOIN player_totals as pt ON r.id = pt.player_id
@@ -70,14 +70,6 @@ echo asTable($threePointShooterResult);
 echo '<h1>Report 2 - Best 3pt Shooting Teams</h1>';
 // write your query here
 $threePointShootingTeamSql = "SELECT
--- t.name as team_name, r.name as player_name,
--- CONCAT(SUM(FORMAT(3pt/3pt_attempted * 100, 2)), '%' ) as 3pt_percentage
--- FROM roster as r
--- LEFT JOIN team as t ON r.team_code = t.code
--- INNER JOIN player_totals as pt ON r.id = pt.player_id
--- GROUP BY team_name, player_name, 3pt_percentage
--- HAVING COUNT(r.id) > 1
-
 t.name as team_name, CONCAT(FORMAT(SUM(3pt)/SUM(3pt_attempted) * 100, 2), '%') as team_3pt_accuracy, SUM(3pt) as total_3pts,
 SUM(case when 3pt >= 1 then 1 else 0 end) as no_of_contributing_player, SUM(case when 3pt_attempted >= 1 then 1 else 0 end) as no_of_attempting_player, SUM(case when 3pt <= 1 then 1 else 0 end) as no_of_players_wtihout_3pt_shot_scored
 FROM roster as r
